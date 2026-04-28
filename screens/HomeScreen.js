@@ -3,14 +3,15 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { auth, db } from '../config';
 
@@ -59,24 +60,19 @@ export default function HomeScreen({ navigation } = {}) {
     fetchListings();
   };
 
-  const handleAuthButtonPress = () => {
+  const handleAuthButtonPress = async () => {
     if (isLoggedIn) {
-      Alert.alert('Logout', 'Are you sure you want to logout?', [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await signOut(auth);
-              router.replace('/login?manual=true');
-            } catch (error) {
-              console.error('Logout failed:', error);
-              Alert.alert('Logout Failed', 'Unable to logout right now. Please try again.');
-            }
-          },
-        },
-      ]);
+      try {
+        if (Platform.OS !== 'web') {
+          Alert.alert('Logging out', 'You have been logged out.');
+        }
+        await signOut(auth);
+        setIsLoggedIn(false);
+        router.replace('/login?manual=true');
+      } catch (error) {
+        console.error('Logout failed:', error);
+        Alert.alert('Logout Failed', 'Unable to logout right now. Please try again.');
+      }
       return;
     }
 
@@ -125,14 +121,20 @@ export default function HomeScreen({ navigation } = {}) {
         </View>
         <View style={styles.headerActions}>
           <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => router.push('/(tabs)/profile')}
+          >
+            <Text style={styles.navButtonText}>Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.loginButton}
             onPress={handleAuthButtonPress}
           >
-            <Text style={styles.loginButtonText}>{isLoggedIn ? 'Logout' : 'Log in'}</Text>
+            <Text style={styles.loginButtonText}>Logout</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.postButton}
-            onPress={() => router.push('/post-food')}
+            onPress={() => router.push('/(tabs)/post-food')}
           >
             <Text style={styles.postButtonText}>+ Post</Text>
           </TouchableOpacity>
@@ -182,6 +184,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+  },
+  navButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.85)',
+  },
+  navButtonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 14,
   },
   loginButton: {
     paddingHorizontal: 14,

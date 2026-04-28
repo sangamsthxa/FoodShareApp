@@ -97,6 +97,14 @@ export default function ProfileScreen({ navigation }= {}) {
 
       {/* Header */}
       <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity onPress={() => navigation?.goBack?.()}>
+            <Text style={styles.headerButtonText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation?.navigate?.('Home')}>
+            <Text style={styles.headerButtonText}>Home</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.headerTitle}>My Profile</Text>
         <TouchableOpacity onPress={handleLogout}>
           <Text style={styles.logoutText}>Logout</Text>
@@ -178,6 +186,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  headerButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
   },
   headerTitle: {
     color: '#fff',

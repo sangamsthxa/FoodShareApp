@@ -1,16 +1,10 @@
 import { Redirect, Tabs } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { auth } from '../../config';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -38,22 +32,43 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarPosition: 'top',
+        tabBarActiveTintColor: '#2e7d32',
+        tabBarInactiveTintColor: '#8a8a8a',
+        tabBarStyle: {
+          display: 'none',
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 18 }}>🏠</Text>
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="post-food"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Share',
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 18 }}>➕</Text>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => (
+            <Text style={{ color, fontSize: 18 }}>👤</Text>
+          ),
         }}
       />
     </Tabs>
