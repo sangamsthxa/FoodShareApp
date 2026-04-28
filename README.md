@@ -1,50 +1,141 @@
-# Welcome to your Expo app 👋
+# FoodShareApp
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+FoodShareApp is a mobile app built with Expo and React Native that helps people share extra food with their local community. Users can create an account, post available food, browse nearby listings, and manage their own shared items.
 
-## Get started
+## Features
 
-1. Install dependencies
+- User authentication with Firebase Authentication
+- Browse food listings stored in Cloud Firestore
+- Create new food posts with quantity, location, description, and expiry details
+- View your own listings and simple profile stats
+- Expo Router navigation with authenticated tab access
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- Expo
+- React Native
+- Expo Router
+- Firebase Authentication
+- Cloud Firestore
+- TypeScript for routing files and JavaScript for screen components
 
-   ```bash
-   npx expo start
-   ```
+## Project Structure
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+FoodShareApp/
+├── app/                 # Expo Router routes
+│   ├── (tabs)/          # Auth-protected tab routes
+│   ├── login.tsx
+│   ├── main.tsx
+│   ├── post-food.tsx
+│   └── profile.tsx
+├── screens/             # Main UI screen components
+├── config.js            # Firebase app/auth/firestore setup
+├── package.json
+└── README.md
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
 
-## Learn more
+### Prerequisites
 
-To learn more about developing your project with Expo, look at the following resources:
+- Node.js
+- npm
+- Expo CLI tools via `npx expo`
+- A Firebase project with Authentication and Firestore enabled
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Installation
 
-## Join the community
+```bash
+npm install
+```
 
-Join our community of developers creating universal apps.
+### Run the App
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npx expo start
+```
+
+You can then open the app in:
+
+- Expo Go
+- an Android emulator
+- an iOS simulator
+- a web browser
+
+Helpful scripts:
+
+```bash
+npm run start
+npm run android
+npm run ios
+npm run web
+npm run lint
+```
+
+## Firebase Setup
+
+This project uses Firebase for authentication and data storage. The app currently initializes Firebase in `config.js`.
+
+To use your own Firebase project:
+
+1. Create a Firebase project in the [Firebase console](https://console.firebase.google.com/).
+2. Enable Email/Password authentication.
+3. Create a Firestore database.
+4. Replace the Firebase config values in `config.js` with your own project credentials.
+
+The app uses:
+
+- `auth` for login and signup
+- `db` for reading and writing `foodListings` and user profile documents
+
+## Current App Flow
+
+1. The root route checks Firebase auth state.
+2. Unauthenticated users are redirected to `login`.
+3. Authenticated users are redirected to the tabbed app.
+4. Users can browse listings, post food, and view profile data.
+
+## Firestore Data Used
+
+### `foodListings`
+
+Each listing currently includes fields such as:
+
+- `foodName`
+- `quantity`
+- `description`
+- `location`
+- `expiry`
+- `postedBy`
+- `userId`
+- `createdAt`
+- `status`
+
+### `users`
+
+User profile documents may include:
+
+- `email`
+- `phoneNumber`
+- `address`
+- `gender`
+- `createdAt`
+
+## Notes
+
+- The current Firebase configuration is checked into `config.js`. For production use, moving secrets and environment-specific configuration out of source control would be a good next step.
+- Some dependencies such as image picker, location, and notifications are installed but not yet fully used in the current screens.
+- The UI is organized using Expo Router route files that wrap screen components from `screens/`.
+
+## Future Improvements
+
+- Add claiming workflow for food listings
+- Add image uploads for food posts
+- Add location-based discovery and maps
+- Add stronger Firestore security rules
+- Move Firebase configuration to environment variables
+
+## License
+
+This project is for educational and development use unless you add your own license.
