@@ -30,7 +30,8 @@ FoodShareApp/
 │   ├── post-food.tsx
 │   └── profile.tsx
 ├── screens/             # Main UI screen components
-├── config.js            # Firebase app/auth/firestore setup
+├── config.js            # Firebase app/auth/firestore setup via env vars
+├── .env.example         # Example Firebase environment variables
 ├── package.json
 └── README.md
 ```
@@ -49,6 +50,14 @@ FoodShareApp/
 ```bash
 npm install
 ```
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then fill in the Firebase values in `.env`.
 
 ### Run the App
 
@@ -75,14 +84,15 @@ npm run lint
 
 ## Firebase Setup
 
-This project uses Firebase for authentication and data storage. The app currently initializes Firebase in `config.js`.
+This project uses Firebase for authentication and data storage. The app initializes Firebase in `config.js` using Expo public environment variables.
 
 To use your own Firebase project:
 
 1. Create a Firebase project in the [Firebase console](https://console.firebase.google.com/).
 2. Enable Email/Password authentication.
 3. Create a Firestore database.
-4. Replace the Firebase config values in `config.js` with your own project credentials.
+4. Copy `.env.example` to `.env`.
+5. Fill in the `EXPO_PUBLIC_FIREBASE_*` values from your Firebase project settings.
 
 The app uses:
 
@@ -124,7 +134,7 @@ User profile documents may include:
 
 ## Notes
 
-- The current Firebase configuration is checked into `config.js`. For production use, moving secrets and environment-specific configuration out of source control would be a good next step.
+- Firebase configuration should be stored in a local `.env` file and never committed to source control.
 - Some dependencies such as image picker, location, and notifications are installed but not yet fully used in the current screens.
 - The UI is organized using Expo Router route files that wrap screen components from `screens/`.
 
@@ -134,7 +144,7 @@ User profile documents may include:
 - Add image uploads for food posts
 - Add location-based discovery and maps
 - Add stronger Firestore security rules
-- Move Firebase configuration to environment variables
+- Rotate any Firebase credentials that were previously committed and update your local `.env`
 
 ## License
 
